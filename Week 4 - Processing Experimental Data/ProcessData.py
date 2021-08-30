@@ -23,16 +23,16 @@ def ProcessExperimentalData(EquationFunction):
 
     y_Estimated = EquationFunction(x_Data, *parameters)
 
-    import numpy as np 
+    from sklearn.metrics import mean_squared_error, r2_score
 
-    RMSE = round(np.sqrt(sum([(y_Data[i] - y_Estimated[i])**2 for i in range(len(y_Data))]) / len(y_Data)), 3)
+    RMSE = round(mean_squared_error(y_Data, y_Estimated, squared=False), 2)
+    r2   = round(r2_score(y_Data, y_Estimated), 2)
 
     import matplotlib.pyplot as plt 
-
     plt.style.use('seaborn-darkgrid')
 
     plt.plot(x_Data, y_Data, 'kx', label = 'Data')
-    plt.plot(x_Data, y_Estimated, 'r', label = f'Fit (C = {round(parameters[0], 2)}, RMSE = {RMSE})')
+    plt.plot(x_Data, y_Estimated, 'r', label = f'P = cRT (c = {round(parameters[0], 2)}' +  r' $\frac{mol}{L}$,' +  f' RMSE = {RMSE}, $R^{2}$ = {r2})')
 
     plt.xlabel(Data.columns[0])
     plt.ylabel(Data.columns[1])
